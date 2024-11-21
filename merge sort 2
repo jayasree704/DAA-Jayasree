@@ -1,0 +1,37 @@
+ Merge Sort Algorithm with Comparison Count
+def merge_sort(arr, count):
+    if len(arr) > 1:
+        mid = len(arr) // 2
+        L = arr[:mid]
+        R = arr[mid:]
+        merge_sort(L, count)
+        merge_sort(R, count)
+        i = j = k = 0
+        while i < len(L) and j < len(R):
+            count[0] += 1
+            if L[i] < R[j]:
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = R[j]
+                j += 1
+            k += 1
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
+        while j < len(R):
+            arr[k] = R[j]
+            j += 1
+            k += 1
+def sort_and_count(arr):
+    count = [0]
+    merge_sort(arr, count)
+    return arr, count[0]
+# Test Cases
+arr1 = [12, 4, 78, 23, 45, 67, 89, 1]
+sorted_arr1, comparisons1 = sort_and_count(arr1)
+print(f"Sorted Array: {sorted_arr1}, Comparisons: {comparisons1}")
+arr2 = [38, 27, 43, 3, 9, 82, 10]
+sorted_arr2, comparisons2 = sort_and_count(arr2)
+print(f"Sorted Array: {sorted_arr2}, Comparisons: {comparisons2}")
