@@ -1,0 +1,12 @@
+def find_max_in_sorted_list(input_list):
+    if not input_list:
+        return None  # or appropriate message for empty list
+    sorted_list = sorted(input_list)
+    return sorted_list[-1]
+# Test Cases
+# Empty List
+assert find_max_in_sorted_list([]) == None
+# Single Element List
+assert find_max_in_sorted_list([5]) == 5
+# All Elements are the Same
+assert find_max_in_sorted_list([3, 3, 3, 3, 3]) == 3
