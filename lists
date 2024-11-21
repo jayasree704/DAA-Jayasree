@@ -1,0 +1,14 @@
+def manipulate_lists(input_list):
+    if not input_list:
+        return []
+    elif len(input_list) == 1:
+        return input_list
+    elif all(x == input_list[0] for x in input_list):
+        return input_list
+    else:
+        return sorted(input_list)
+# Test Cases
+print(manipulate_lists([]))  # Expected Output: []
+print(manipulate_lists([1]))  # Expected Output: [1]
+print(manipulate_lists([7, 7, 7, 7]))  # Expected Output: [7, 7, 7, 7]
+print(manipulate_lists([-5, -1, -3, -2, -4]))  # Expected Output: [-5, -4, -3, -2, -1]
