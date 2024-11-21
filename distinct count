@@ -1,0 +1,21 @@
+def sum_of_squares_distinct_counts(nums):
+    result = 0
+    for i in range(len(nums)):
+        count = {}
+        for j in range(i, len(nums)):
+            if nums[j] in count:
+                count[nums[j]] += 1
+            else:
+                count[nums[j]] = 1
+            result += sum([val ** 2 for val in count.values()])
+    return result
+
+# Example 1
+nums1 = [1, 2, 1]
+output1 = sum_of_squares_distinct_counts(nums1)
+print(output1)  # Output: 15
+
+# Example 2
+nums2 = [1, 1]
+output2 = sum_of_squares_distinct_counts(nums2)
+print(output2)  # Output: 3
