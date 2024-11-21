@@ -1,0 +1,17 @@
+def large_group_intervals(s):
+    intervals = []
+    start = 0
+    
+    while start < len(s):
+        end = start
+        while end < len(s) and s[end] == s[start]:
+            end += 1
+        if end - start >= 3:
+            intervals.append([start, end - 1])
+        start = end
+    
+    return intervals
+
+# Example usage
+print(large_group_intervals("abbxxxxzzy"))  # Output: [[3, 6]]
+print(large_group_intervals("abc"))          # Output: []
