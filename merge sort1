@@ -1,0 +1,31 @@
+def merge_sort(arr):
+    if len(arr) > 1:
+        mid = len(arr) // 2
+        L = arr[:mid]
+        R = arr[mid:]
+        merge_sort(L)
+        merge_sort(R)
+        i = j = k = 0
+        while i < len(L) and j < len(R):
+            if L[i] < R[j]:
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = R[j]
+                j += 1
+            k += 1
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
+        while j < len(R):
+            arr[k] = R[j]
+            j += 1
+            k += 1
+# Test Cases
+arr1 = [31, 23, 35, 27, 11, 21, 15, 28]
+merge_sort(arr1)
+print(arr1)  # Output: [11, 15, 21, 23, 27, 28, 31, 35]
+arr2 = [22, 34, 25, 36, 43, 67, 52, 13, 65, 17]
+merge_sort(arr2)
+print(arr2)  # Output: [13, 17, 22, 25, 34, 36, 43, 52, 65, 67]
