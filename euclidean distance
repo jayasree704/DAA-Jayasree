@@ -1,0 +1,63 @@
+import math
+import itertools
+
+# Function to calculate the Euclidean distance between two points
+def euclidean_distance(point1, point2):
+    return math.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
+
+# Function to find the closest pair of points using the brute force method
+def closest_pair(points):
+    min_distance = float('inf')
+    closest_points = (None, None)
+    
+    for point1, point2 in itertools.combinations(points, 2):
+        distance = euclidean_distance(point1, point2)
+        if distance < min_distance:
+            min_distance = distance
+            closest_points = (point1, point2)
+    
+    return closest_points
+
+# Sample set of points
+points = [(10, 0), (11, 5), (5, 3), (9, 3.5), (15, 3), (12.5, 7), (6, 6.5), (7.5, 4.5)]
+
+# Finding the closest pair of points
+closest_points = closest_pair(points)
+print("Closest pair of points:", closest_points)
+
+# Brute-force algorithm to solve the convex hull problem
+def convex_hull(points):
+    hull = []
+    for point in points:
+        while len(hull) >= 2 and not is_counter_clockwise(hull[-2], hull[-1], point):
+            hull.pop()
+        hull.append(point)
+    return hull
+
+def is_counter_clockwise(p1, p2, p3):
+    return (p2[0] - p1[0]) * (p3[1] - p1[1]) - (p2[1] - p1[1]) * (p3[0] - p1[0]) > 0
+
+# Finding the convex hull
+hull_points = convex_hull(points)
+print("Convex hull points:", hull_points)
+
+# Handling multiple points that are lying on the same line
+def modified_convex_hull(points):
+    points = sorted(points)
+    lower = []
+    for p in points:
+        while len(lower) >= 2 and not is_counter_clockwise(lower[-2], lower[-1], p):
+            lower.pop()
+        lower.append(p)
+
+    upper = []
+    for p in reversed(points):
+        while len(upper) >= 2 and not is_counter_clockwise(upper[-2], upper[-1], p):
+            upper.pop()
+        upper.append(p)
+
+    return lower[:-1] + upper[:-1]
+
+# Finding the modified convex hull
+modified_hull_points = modified_convex_hull(points)
+print("Modified convex hull points:", modified_hull_points)
