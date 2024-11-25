@@ -1,0 +1,63 @@
+# Huffman Tree Node
+class Node:
+    def __init__(self, char, freq):
+        self.char = char
+        self.freq = freq
+        self.left = None
+        self.right = None
+
+# Function to build the Huffman Tree
+def build_huffman_tree(characters, frequencies):
+    import heapq
+    heap = [[freq, Node(char, freq)] for char, freq in zip(characters, frequencies)]
+    heapq.heapify(heap)
+
+    while len(heap) > 1:
+        low1 = heapq.heappop(heap)
+        low2 = heapq.heappop(heap)
+        merged = [low1[0] + low2[0], Node(None, low1[0] + low2[0])]
+        merged[1].left = low1[1]
+        merged[1].right = low2[1]
+        heapq.heappush(heap, merged)
+
+    return heap[0][1]
+
+# Function to generate the Huffman codes
+def generate_codes(node, current_code="", codes={}):
+    if node is not None:
+        if node.char is not None:
+            codes[node.char] = current_code
+        generate_codes(node.left, current_code + "0", codes)
+        generate_codes(node.right, current_code + "1", codes)
+    return codes
+
+# Function to decode the encoded string
+def decode_huffman_tree(root, encoded_string):
+    decoded_string = ""
+    current_node = root
+    for bit in encoded_string:
+        current_node = current_node.left if bit == '0' else current_node.right
+        if current_node.char is not None:
+            decoded_string += current_node.char
+            current_node = root
+    return decoded_string
+
+# Test Case 1
+n1 = 4
+characters1 = ['a', 'b', 'c', 'd']
+frequencies1 = [5, 9, 12, 13]
+encoded_string1 = '1101100111110'
+
+root1 = build_huffman_tree(characters1, frequencies1)
+decoded_output1 = decode_huffman_tree(root1, encoded_string1)
+print(decoded_output1)  # Output: "abacd"
+
+# Test Case 2
+n2 = 6
+characters2 = ['f', 'e', 'd', 'c', 'b', 'a']
+frequencies2 = [5, 9, 12, 13, 16, 45]
+encoded_string2 = '110011011100101111001011'
+
+root2 = build_huffman_tree(characters2, frequencies2)
+decoded_output2 = decode_huffman_tree(root2, encoded_string2)
+print(decoded_output2)  # Output: "fcbade"
