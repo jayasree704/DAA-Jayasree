@@ -1,0 +1,42 @@
+import numpy as np
+from scipy.optimize import linear_sum_assignment
+# Station times for each line
+station_times = np.array([[5, 9, 3],
+                           [6, 8, 4],
+                           [7, 6, 5]])
+# Transfer times between lines
+transfer_times = np.array([[0, 2, 3],
+                            [2, 0, 4],
+                            [3, 4, 0]])
+# Dependencies
+dependencies = [(0, 1), (1, 2)]
+# Function to calculate total production time
+def calculate_production_time(schedule):
+    total_time = 0
+    for i in range(len(schedule)):
+        line, station = schedule[i]
+        total_time += station_times[line][station]
+        if i > 0:
+            prev_line, prev_station = schedule[i - 1]
+            total_time += transfer_times[prev_line][line]
+    return total_time
+# Generate all possible schedules
+from itertools import product
+lines = [0, 1, 2]
+stations = [0, 1, 2]
+schedules = list(product(lines, stations))
+# Filter schedules based on dependencies
+valid_schedules = []
+for schedule in product(schedules, repeat=len(dependencies) + 1):
+    if all(schedule[i][1] < schedule[i + 1][1] for i in range(len(dependencies))):
+        valid_schedules.append(schedule)
+# Find the optimal schedule
+min_time = float('inf')
+optimal_schedule = None
+for schedule in valid_schedules:
+    production_time = calculate_production_time(schedule)
+    if production_time < min_time:
+        min_time = production_time
+        optimal_schedule = schedule
+print("Optimal Schedule:", optimal_schedule)
+print("Minimum Production Time:", min_time)
