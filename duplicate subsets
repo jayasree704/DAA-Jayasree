@@ -1,0 +1,31 @@
+from itertools import combinations
+
+def generate_subsets_with_element(nums, x):
+    subsets = []
+    for r in range(len(nums) + 1):
+        for combo in combinations(nums, r):
+            if x in combo:
+                subsets.append(list(combo))
+    return subsets
+
+# Example usage
+E = [2, 3, 4, 5]
+x = 3
+result = generate_subsets_with_element(E, x)
+print("The subsets containing 3:", result)
+
+def power_set(nums):
+    result = []
+    for r in range(len(nums) + 1):
+        for combo in combinations(nums, r):
+            result.append(list(combo))
+    return result
+
+# Example usage
+nums1 = [1, 2, 3]
+output1 = power_set(nums1)
+print("Output for nums = [1, 2, 3]:", output1)
+
+nums2 = [0]
+output2 = power_set(nums2)
+print("Output for nums = [0]:", output2)
