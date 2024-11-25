@@ -1,0 +1,46 @@
+class OptimalBinarySearchTree:
+    def __init__(self, keys, freq):
+        self.keys = keys
+        self.freq = freq
+        self.n = len(keys)
+        self.cost = [[0] * (self.n + 1) for _ in range(self.n + 1)]
+        self.root = [[0] * (self.n + 1) for _ in range(self.n + 1)]
+
+    def optimal_bst(self):
+        for i in range(self.n):
+            self.cost[i][i + 1] = self.freq[i]
+            self.root[i][i + 1] = i
+
+        for length in range(2, self.n + 1):
+            for i in range(self.n - length + 1):
+                j = i + length
+                self.cost[i][j] = float('inf')
+                total_freq = sum(self.freq[i:j])
+                for r in range(i, j):
+                    c = self.cost[i][r] + self.cost[r + 1][j] + total_freq
+                    if c < self.cost[i][j]:
+                        self.cost[i][j] = c
+                        self.root[i][j] = r
+
+    def print_cost(self):
+        for i in range(self.n + 1):
+            for j in range(self.n + 1):
+                print(f"{self.cost[i][j]:.1f}", end="\t")
+            print()
+
+    def print_root(self):
+        for i in range(self.n + 1):
+            for j in range(self.n + 1):
+                print(self.root[i][j], end="\t")
+            print()
+
+keys = ['A', 'B', 'C', 'D']
+freq = [0.1, 0.2, 0.4, 0.3]
+obst = OptimalBinarySearchTree(keys, freq)
+obst.optimal_bst()
+
+print("Cost Table")
+obst.print_cost()
+print("Root Table")
+obst.print_root()
+print("Output:", obst.cost[0][4])
