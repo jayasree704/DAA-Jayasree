@@ -1,0 +1,50 @@
+class OBST:
+    def __init__(self, keys, freq):
+        self.keys = keys
+        self.freq = freq
+        self.n = len(keys)
+        self.cost = [[0] * self.n for _ in range(self.n)]
+        self.root = [[0] * self.n for _ in range(self.n)]
+
+    def construct_obst(self):
+        for i in range(self.n):
+            self.cost[i][i] = self.freq[i]
+
+        for length in range(2, self.n + 1):
+            for i in range(self.n - length + 1):
+                j = i + length - 1
+                self.cost[i][j] = float('inf')
+                for r in range(i, j + 1):
+                    c = (self.cost[i][r - 1] if r > i else 0) + \
+                        (self.cost[r + 1][j] if r < j else 0) + \
+                        sum(self.freq[i:j + 1])
+                    if c < self.cost[i][j]:
+                        self.cost[i][j] = c
+                        self.root[i][j] = r
+
+    def display_results(self):
+        print("Cost Matrix:")
+        for row in self.cost:
+            print("\t".join(map(str, row)))
+        print("\nRoot Matrix:")
+        for row in self.root:
+            print("\t".join(map(str, row)))
+        print("\nTotal Cost:", self.cost[0][self.n - 1])
+
+
+keys = [10, 12, 16, 21]
+freq = [4, 2, 6, 3]
+obst = OBST(keys, freq)
+obst.construct_obst()
+obst.display_results()
+
+# Test cases
+test_cases = [
+    ([10, 12], [34, 50]),
+    ([10, 12, 20], [34, 8, 50])
+]
+
+for keys, freq in test_cases:
+    obst = OBST(keys, freq)
+    obst.construct_obst()
+    obst.display_results()
