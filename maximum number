@@ -1,0 +1,36 @@
+def graph_coloring(edges, n, k):
+    from collections import defaultdict
+
+    def is_safe(v, color, c):
+        for i in graph[v]:
+            if color[i] == c:
+                return False
+        return True
+
+    def graph_coloring_util(m, color, v):
+        if v == n:
+            return True
+        for c in range(1, m + 1):
+            if is_safe(v, color, c):
+                color[v] = c
+                if graph_coloring_util(m, color, v + 1):
+                    return True
+                color[v] = 0
+        return False
+
+    graph = defaultdict(list)
+    for u, v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
+
+    color = [0] * n
+    if graph_coloring_util(k, color, 0):
+        return color
+    else:
+        return None
+
+edges = [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]
+n = 4
+k = 3
+result = graph_coloring(edges, n, k)
+print("Coloring of the graph:", result)
