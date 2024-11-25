@@ -1,0 +1,42 @@
+import itertools
+
+# Define the distances between the cities
+distances = {
+    ('A', 'B'): 10,
+    ('A', 'C'): 15,
+    ('A', 'D'): 20,
+    ('A', 'E'): 25,
+    ('B', 'C'): 35,
+    ('B', 'D'): 25,
+    ('B', 'E'): 30,
+    ('C', 'D'): 30,
+    ('C', 'E'): 20,
+    ('D', 'E'): 15
+}
+
+# Function to calculate the total distance of a route
+def calculate_distance(route):
+    total_distance = 0
+    for i in range(len(route) - 1):
+        total_distance += distances.get((route[i], route[i + 1]), 0)
+    total_distance += distances.get((route[-1], route[0]), 0)  # Return to starting city
+    return total_distance
+
+# List of cities
+cities = ['A', 'B', 'C', 'D', 'E']
+
+# Generate all possible routes
+all_routes = itertools.permutations(cities)
+
+# Find the shortest route
+shortest_route = None
+min_distance = float('inf')
+
+for route in all_routes:
+    current_distance = calculate_distance(route)
+    if current_distance < min_distance:
+        min_distance = current_distance
+        shortest_route = route
+
+# Output the shortest route and its total distance
+print(f"The shortest route is: {' -> '.join(shortest_route)} with a total distance of {min_distance}.")
