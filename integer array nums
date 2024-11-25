@@ -1,0 +1,13 @@
+def findTargetSumWays(nums, target):
+    from collections import defaultdict
+
+    def dfs(index, current_sum):
+        if index == len(nums):
+            return 1 if current_sum == target else 0
+        return dfs(index + 1, current_sum + nums[index]) + dfs(index + 1, current_sum - nums[index])
+
+    return dfs(0, 0)
+
+# Example usage
+print(findTargetSumWays([1, 1, 1, 1, 1], 3))  # Output: 5
+print(findTargetSumWays([1], 1))               # Output: 1
