@@ -1,0 +1,71 @@
+def is_safe(board, row, col):
+    for i in range(row):
+        if board[i] == col or \
+           board[i] - i == col - row or \
+           board[i] + i == col + row:
+            return False
+    return True
+
+def solve_n_queens(n, board, row):
+    if row == n:
+        return [board[:]
+    solutions = []
+    for col in range(n):
+        if is_safe(board, row, col):
+            board[row] = col
+            solutions += solve_n_queens(n, board, row + 1)
+    return solutions
+
+def n_queens_generalized(n, m):
+    board = [-1] * n
+    return solve_n_queens(n, board, 0)
+
+# Example for 8x10 board
+n = 8
+m = 10
+solution_8x10 = n_queens_generalized(n, m)
+print("Possible solution for 8x10 board:", solution_8x10)
+
+# Example for 5x5 board with obstacles
+def is_safe_with_obstacles(board, row, col, obstacles):
+    if (row, col) in obstacles:
+        return False
+    return is_safe(board, row, col)
+
+def solve_n_queens_with_obstacles(n, board, row, obstacles):
+    if row == n:
+        return [board[:]]
+    solutions = []
+    for col in range(n):
+        if is_safe_with_obstacles(board, row, col, obstacles):
+            board[row] = col
+            solutions += solve_n_queens_with_obstacles(n, board, row + 1, obstacles)
+    return solutions
+
+n = 5
+obstacles = [(2, 2), (4, 4)]
+board = [-1] * n
+solution_5x5_obstacles = solve_n_queens_with_obstacles(n, board, 0, obstacles)
+print("Possible solution for 5x5 board with obstacles:", solution_5x5_obstacles)
+
+# Example for 6x6 board with restricted positions
+def is_safe_with_restrictions(board, row, col, restricted):
+    if col in restricted:
+        return False
+    return is_safe(board, row, col)
+
+def solve_n_queens_with_restrictions(n, board, row, restricted):
+    if row == n:
+        return [board[:]]
+    solutions = []
+    for col in range(n):
+        if is_safe_with_restrictions(board, row, col, restricted):
+            board[row] = col
+            solutions += solve_n_queens_with_restrictions(n, board, row + 1, restricted)
+    return solutions
+
+n = 6
+restricted_positions = [2, 4]
+board = [-1] * n
+solution_6x6_restricted = solve_n_queens_with_restrictions(n, board, 0, restricted_positions)
+print("Possible solution for 6x6 board with restricted positions:", solution_6x6_restricted)
