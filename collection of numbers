@@ -1,0 +1,14 @@
+from itertools import permutations
+
+def unique_permutations(nums):
+    return list(set(permutations(nums)))
+
+# Example 1
+nums1 = [1, 1, 2]
+output1 = unique_permutations(nums1)
+print([list(p) for p in output1])
+
+# Example 2
+nums2 = [1, 2, 3]
+output2 = unique_permutations(nums2)
+print([list(p) for p in output2])
