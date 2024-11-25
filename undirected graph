@@ -1,0 +1,28 @@
+def catMouseGame(graph):
+    from collections import defaultdict
+    
+    n = len(graph)
+    memo = {}
+
+    def dfs(mouse, cat, turn):
+        if mouse == 0: return 1
+        if cat == mouse: return 2
+        if (mouse, cat, turn) in memo: return memo[(mouse, cat, turn)]
+
+        if turn == 0:  # Mouse's turn
+            for next_mouse in graph[mouse]:
+                if dfs(next_mouse, cat, 1) == 1:
+                    memo[(mouse, cat, turn)] = 1
+                    return 1
+            memo[(mouse, cat, turn)] = 0
+            return 0
+        else:  # Cat's turn
+            for next_cat in graph[cat]:
+                if next_cat == 0: continue
+                if dfs(mouse, next_cat, 0) == 2:
+                    memo[(mouse, cat, turn)] = 2
+                    return 2
+            memo[(mouse, cat, turn)] = 0
+            return 0
+
+    return dfs(1, 2, 0)
