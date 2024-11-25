@@ -1,0 +1,19 @@
+def sum_of_subarray_mins(arr):
+    MOD = 10**9 + 7
+    stack = []
+    total_sum = 0
+    n = len(arr)
+    
+    for i in range(n + 1):
+        while stack and (i == n or arr[stack[-1]] > arr[i]):
+            j = stack.pop()
+            k = stack[-1] if stack else -1
+            total_sum += arr[j] * (i - j) * (j - k)
+            total_sum %= MOD
+        stack.append(i)
+    
+    return total_sum
+
+# Example usage
+print(sum_of_subarray_mins([3, 1, 2, 4]))  # Output: 17
+print(sum_of_subarray_mins([11, 81, 94, 43, 3]))  # Output: 444
