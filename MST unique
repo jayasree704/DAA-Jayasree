@@ -1,0 +1,75 @@
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = []
+
+    def add_edge(self, u, v, w):
+        self.graph.append((u, v, w))
+
+    def find_parent(self, parent, i):
+        if parent[i] == i:
+            return i
+        return self.find_parent(parent, parent[i])
+
+    def union(self, parent, rank, x, y):
+        xroot = self.find_parent(parent, x)
+        yroot = self.find_parent(parent, y)
+        if rank[xroot] < rank[yroot]:
+            parent[xroot] = yroot
+        elif rank[xroot] > rank[yroot]:
+            parent[yroot] = xroot
+        else:
+            parent[yroot] = xroot
+            rank[xroot] += 1
+
+    def kruskal_mst(self):
+        result = []
+        i, e = 0, 0
+        self.graph = sorted(self.graph, key=lambda item: item[2])
+        parent = []
+        rank = []
+        for node in range(self.V):
+            parent.append(node)
+            rank.append(0)
+        while e < self.V - 1:
+            u, v, w = self.graph[i]
+            i += 1
+            x = self.find_parent(parent, u)
+            y = self.find_parent(parent, v)
+            if x != y:
+                e += 1
+                result.append((u, v, w))
+                self.union(parent, rank, x, y)
+        return result
+
+def is_mst_unique(graph_edges, given_mst):
+    graph = Graph(len(graph_edges))
+    for u, v, w in graph_edges:
+        graph.add_edge(u, v, w)
+    mst = graph.kruskal_mst()
+    mst_weight = sum(weight for _, _, weight in mst)
+    given_mst_weight = sum(weight for _, _, weight in given_mst)
+    
+    if sorted(mst) == sorted(given_mst):
+        return True, None
+    else:
+        return False, mst
+
+# Test Case 1
+n1 = 4
+m1 = 5
+edges1 = [(0, 1, 10), (0, 2, 6), (0, 3, 5), (1, 3, 15), (2, 3, 4)]
+given_mst1 = [(2, 3, 4), (0, 3, 5), (0, 1, 10)]
+unique1, alternative1 = is_mst_unique(edges1, given_mst1)
+print(f"Is the given MST unique? {unique1}")
+
+# Test Case 2
+n2 = 5
+m2 = 6
+edges2 = [(0, 1, 1), (0, 2, 1), (1, 3, 2), (2, 3, 2), (3, 4, 3), (4, 2, 3)]
+given_mst2 = [(0, 1, 1), (0, 2, 1), (1, 3, 2), (3, 4, 3)]
+unique2, alternative2 = is_mst_unique(edges2, given_mst2)
+print(f"Is the given MST unique? {unique2}")
+if not unique2:
+    print(f"Another possible MST: {alternative2}")
+    print(f"Total weight of MST: {sum(weight for _, _, weight in alternative2)}")
